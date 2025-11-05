@@ -1,0 +1,8 @@
+[
+  { "id": 1, "text": "I need some water, please." },
+  { "id": 2, "text": "Can you check my temperature?" },
+  { "id": 3, "text": "I feel too warm right now." },
+  { "id": 4, "text": "I need my medication." },
+  { "id": 5, "text": "Can you turn on the fan?" },
+  { "id": 6, "text": "I need to rest." }
+]

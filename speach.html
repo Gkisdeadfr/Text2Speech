@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text2Speech</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>🗣️ Text2Speech</h1>
+    <textarea id="textInput" placeholder="Type what you want to say here..."></textarea>
+    <button onclick="speakText()">Speak What I Typed</button>
+
+    <div class="phrases-container">
+        <p>Or click a quick phrase:</p>
+        <div id="quickPhrases">
+            </div>
+    </div>
+
+    <script>
+        // 1. TTS Function 
+        function speakText(textOverride) {
+            const text = textOverride || document.getElementById('textInput').value;
+
+            if (!text.trim()) {
+                alert("Please enter or select some text first.");
+                return;
+            }
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Your browser does not support Text-to-Speech.');
+            }
+        }
+
+        // 2. JSON Loading and Button Generation
+        function loadPhrases() {
+            fetch('phrases.json')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('quickPhrases');
+                    data.forEach(phrase => {
+                        const button = document.createElement('button');
+                        button.className = 'phrase-button';
+                        button.textContent = phrase.text;
+                        
+                        // Add an event listener to speak the text when clicked
+                        button.onclick = function() {
+                            speakText(phrase.text);
+                        };
+                        
+                        container.appendChild(button);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading phrases.json:', error);
+                    document.getElementById('quickPhrases').innerHTML = '<p>Could not load quick phrases.</p>';
+                });
+        }
+
+        // Load the phrases when the page finishes loading
+        window.onload = loadPhrases;
+    </script>
+</body>
+</html>
